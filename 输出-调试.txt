@@ -1,0 +1,93 @@
+﻿“DelaunayTriangulation.exe”(Win32): 已加载“C:\Users\xiashj\source\repos\DelaunayTriangulation\x64\Debug\DelaunayTriangulation.exe”。已加载符号。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\ntdll.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\kernel32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\KernelBase.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\user32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\win32u.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\gdi32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\gdi32full.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\msvcp_win.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\ucrtbase.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\shell32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\cfgmgr32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\SHCore.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\msvcrt.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\rpcrt4.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\combase.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\bcryptprimitives.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\windows.storage.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\sechost.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\advapi32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\profapi.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\powrprof.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\umpdc.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\shlwapi.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\kernel.appcore.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\cryptsp.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\msvcp140d.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\vcruntime140d.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\vcruntime140_1d.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\ucrtbased.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\imm32.dll”。
+线程 0x4fa8 已退出，返回值为 0 (0x0)。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\uxtheme.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\winmm.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\winmmbase.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\winmmbase.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\winmmbase.dll”。
+“DelaunayTriangulation.exe”(Win32): 已卸载“C:\Windows\System32\winmmbase.dll”
+“DelaunayTriangulation.exe”(Win32): 已卸载“C:\Windows\System32\winmmbase.dll”
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\dinput8.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\XInput1_4.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\devobj.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\InputHost.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\CoreMessaging.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\CoreUIComponents.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\WinTypes.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\propsys.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\oleaut32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\ntmarta.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\dwmapi.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\msctf.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\hid.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\setupapi.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\bcrypt.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\wintrust.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\msasn1.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\crypt32.dll”。
+onecore\com\combase\objact\objact.cxx(836)\combase.dll!00007FFC5D9EB6A7: (caller: 00007FFC5D9EA52C) ReturnHr(1) tid(2fb8) 800401F0 尚未调用 CoInitialize。
+onecore\com\combase\objact\objact.cxx(836)\combase.dll!00007FFC5D9EB6A7: (caller: 00007FFC5D9EA52C) ReturnHr(2) tid(2fb8) 800401F0 尚未调用 CoInitialize。
+onecore\com\combase\objact\objact.cxx(836)\combase.dll!00007FFC5D9EB6A7: (caller: 00007FFC5D9EA52C) ReturnHr(3) tid(2fb8) 800401F0 尚未调用 CoInitialize。
+onecore\com\combase\objact\objact.cxx(836)\combase.dll!00007FFC5D9EB6A7: (caller: 00007FFC5D9EA52C) ReturnHr(4) tid(2fb8) 800401F0 尚未调用 CoInitialize。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\opengl32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\glu32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\DXCore.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_9cb6a07d60163933\nvoglv64.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\ole32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\wtsapi32.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\version.dll”。
+线程 0x478 已退出，返回值为 0 (0x0)。
+线程 0x1a4c 已退出，返回值为 0 (0x0)。
+线程 0x5cac 已退出，返回值为 0 (0x0)。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\nvspcap64.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\winsta.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\TextInputFramework.dll”。
+“DelaunayTriangulation.exe”(Win32): 已加载“C:\Windows\System32\iertutil.dll”。
+“DelaunayTriangulation.exe”(Win32): 已卸载“C:\Windows\System32\XInput1_4.dll”
+“DelaunayTriangulation.exe”(Win32): 已卸载“C:\Windows\System32\hid.dll”
+“DelaunayTriangulation.exe”(Win32): 已卸载“C:\Windows\System32\dinput8.dll”
+“DelaunayTriangulation.exe”(Win32): 已卸载“C:\Windows\System32\winmmbase.dll”
+“DelaunayTriangulation.exe”(Win32): 已卸载“C:\Windows\System32\winmm.dll”
+线程 0x62b8 已退出，返回值为 0 (0x0)。
+线程 0x6b68 已退出，返回值为 0 (0x0)。
+线程 0x2e0c 已退出，返回值为 0 (0x0)。
+线程 0x53a8 已退出，返回值为 0 (0x0)。
+线程 0x3a0c 已退出，返回值为 0 (0x0)。
+线程 0x4d9c 已退出，返回值为 0 (0x0)。
+线程 0x4480 已退出，返回值为 0 (0x0)。
+线程 0x27bc 已退出，返回值为 0 (0x0)。
+线程 0x4e78 已退出，返回值为 0 (0x0)。
+线程 0x285c 已退出，返回值为 0 (0x0)。
+线程 0x7644 已退出，返回值为 0 (0x0)。
+线程 0xd00 已退出，返回值为 0 (0x0)。
+程序“[18240] DelaunayTriangulation.exe”已退出，返回值为 0 (0x0)。
