@@ -30,8 +30,17 @@ namespace dt {
 		double x;
 		double y;
 		double h; // height
-		bool operator==(const Vertex& other) { return x == other.x && y == other.y; }
-		bool operator!=(const Vertex& other) { return !(*this == other); }
+		bool operator==(const Vertex& other) const { return x == other.x && y == other.y; }
+		bool operator!=(const Vertex& other) const { return !(*this == other); }
+		bool operator<(const Vertex& other) const { // lexicographical order
+			if (y < other.y)
+				return true;
+			else if (y == other.y)
+				return x < other.x;
+			else
+				return false;
+		}
+			
 		//Edge* inc = nullptr; // "first" outgoing half edge
 	};
 
