@@ -2,19 +2,8 @@
 #include <stdexcept>
 #include <list>
 #include <algorithm>
-#include <limits>
 
 namespace dt {
-
-	inline bool IsLeftExtremePoint(const Vertex& p)
-	{
-		return p.x == std::numeric_limits<double>::lowest();
-	}
-
-	inline bool IsRightExtremePoint(const Vertex& p)
-	{
-		return p.x == std::numeric_limits<double>::max();
-	}
 	
 	inline double lerp(double start, double end, double t)
 	{
@@ -51,21 +40,9 @@ namespace dt {
 		return sqrt(DistanceSquared(p, q));
 	}
 
-	// note: modified to take into account symbolic vertices (vertices a and b in the super triangle)
-	bool ToLeft(const Vertex& p, const Vertex& q, const Vertex& r)
+
+	inline bool ToLeft(const Vertex& p, const Vertex& q, const Vertex& r)
 	{
-		if (IsLeftExtremePoint(p))
-			return q < r;
-		if (IsRightExtremePoint(p))
-			return r < q;
-		if (IsLeftExtremePoint(q))
-			return r < p;
-		if (IsRightExtremePoint(q))
-			return p < r;
-		if (IsLeftExtremePoint(r))
-			return p < q;
-		if (IsRightExtremePoint(r))
-			return q < p;
 		return Area2(p, q, r) >= 0;
 	}
 
@@ -80,18 +57,8 @@ namespace dt {
 	}
 
 	// determine if point p is inside the circumcircle of triangle abc
-	// note: modified to take into account symbolic vertices (vertices a and b in the super triangle)
 	inline bool InCircle(const Vertex& p, const Vertex& a, const Vertex& b, const Vertex& c)
 	{
-		if (IsLeftExtremePoint(p) || IsRightExtremePoint(p))
-			return false;
-		if (IsLeftExtremePoint(a) || IsRightExtremePoint(a))
-			return ToLeft(b, c, p);
-		if (IsLeftExtremePoint(b) || IsRightExtremePoint(b))
-			return ToLeft(c, a, p);
-		if (IsLeftExtremePoint(c) || IsRightExtremePoint(c))
-			return ToLeft(a, b, p);
-
 		double d =
 			- determinant(
 				b.x, b.y, b.x * b.x + b.y * b.y,
@@ -253,14 +220,16 @@ namespace dt {
 	void Delaunay::triangulate()
 	{
 		// initilization: add super triangle
-		// find the highest point in the point set
-		auto highest_point = std::max_element(_vertices.begin(), _vertices.end());
-		std::iter_swap(_vertices.begin(), highest_point);
-
 		// Determinate the super triangle
-		Vertex a(std::numeric_limits<double>::lowest(), getMaxH() + 10);
-		Vertex b(std::numeric_limits<double>::max(), getMinH() - 10);
-		Vertex& c = _vertices.front();
+		const double dx = maxX - minX;
+		const double dy = maxY - minY;
+		const double deltaMax = (dx > dy) ? dx : dy;
+		const double midx = (minX + maxX) / 2;
+		const double midy = (minY + maxY) / 2;
+
+		Vertex a(midx - 20 * deltaMax, midy - deltaMax);
+		Vertex b(midx + 20 * deltaMax, midy - deltaMax);
+		Vertex c(midx, midy + 20 * deltaMax);
 
 		Edge* ab = new Edge;
 		Edge* bc = new Edge;
@@ -285,6 +254,10 @@ namespace dt {
 		ca->twin = nullptr;
 		ca->inc = t;
 
+		//a.inc = ab;
+		//b.inc = bc;
+		//c.inc = ca;
+
 		t->inc = ab;
 
 		_edges.push_back(ab);
@@ -293,9 +266,8 @@ namespace dt {
 		_triangles.push_back(t);
 
 		// add new vertices in random order
-		for (auto it = _vertices.begin()+1; it != _vertices.end(); ++it)
+		for (auto& v : _vertices)
 		{
-			Vertex& v = *it;
 			// point location: determine which triangle v is in
 			Triangle* t = nullptr;
 			for (const auto& triangle : _triangles)
@@ -543,7 +515,7 @@ namespace dt {
 		// delete all triangles connected to 3 points of the super triangle
 		for (auto& t : _triangles)
 		{
-			if (t->hasVertex(&a) || t->hasVertex(&b))
+			if (t->hasVertex(&a) || t->hasVertex(&b) || t->hasVertex(&c))
 			{
 				// also make 3 incident edges' incident triangle null
 				t->inc->inc = nullptr;
@@ -723,6 +695,8 @@ namespace dt {
 		Edge* aq = e->twin->succ;
 		Triangle* t1 = e->inc;
 		Triangle* t2 = e->twin->inc;
+
+		//if (q->h == 0) return;
 
 		if (t1->inCircumcircle(*q))
 		{
