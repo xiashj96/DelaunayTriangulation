@@ -64,7 +64,7 @@ namespace dt {
 	class Delaunay
 	{
 	public:
-		Delaunay(const std::vector<Vertex>& vertices);
+		Delaunay(const std::vector<Vertex>& vertices, double deleteLongTriangleAtBoundary = 0.5);
 		Delaunay(const Delaunay&) = delete;
 		Delaunay(Delaunay&&) = delete;
 		Delaunay& operator=(const Delaunay&) = delete;
@@ -76,16 +76,13 @@ namespace dt {
 		std::vector<unsigned int> getTriangleVertexIndices() const;
 		// return false if p is outside the convex hull of point set
 		bool interpolate(Vertex& p) const;
-		std::vector<Contour> getContours(double height, double minRelativeLength = 0.1);
+		std::vector<Contour> getContours(double height);
 
-		double getMaxX() const { return maxX; }
-		double getMinX() const { return minX; }
-		double getMaxY() const { return maxY; }
-		double getMinY() const { return minY; }
-		double getMaxH() const { return maxH; }
-		double getMinH() const { return minH; }
+		Vertex world2screen(const Vertex& p) const;
+		Vertex screen2world(const Vertex& p) const;
+
 	private:
-		void triangulate();
+		void triangulate(double deleteLongTriangleAtBoundary);
 		void legalizeEdge(Vertex* p, Edge* e);
 
 		double minX, maxX, minY, maxY, minH, maxH;

@@ -46,7 +46,7 @@ namespace dt {
 		return Area2(p, q, r) >= 0;
 	}
 
-	inline bool Sameline(const Vertex& p, const Vertex& q, const Vertex& r)
+	inline bool Sameline(const Vertex& p, const Vertex& q, const Vertex&   r)
 	{
 		return Area2(p, q, r) == 0;
 	}
@@ -59,24 +59,46 @@ namespace dt {
 	// determine if point p is inside the circumcircle of triangle abc
 	inline bool InCircle(const Vertex& p, const Vertex& a, const Vertex& b, const Vertex& c)
 	{
+		double a2 = a.x * a.x + a.y * a.y;
+		double b2 = b.x * b.x + b.y * b.y;
+		double c2 = c.x * c.x + c.y * c.y;
+		double p2 = p.x * p.x + p.y * p.y;
+
 		double d =
-			- determinant(
-				b.x, b.y, b.x * b.x + b.y * b.y,
-				c.x, c.y, c.x * c.x + c.y * c.y,
-				p.x, p.y, p.x * p.x + p.y * p.y)
+			-determinant(
+				b.x, c.x, p.x,
+				b.y, c.y, p.y,
+				b2, c2, p2)
 			+ determinant(
-				a.x, a.y, a.x * a.x + a.y * a.y,
-				c.x, c.y, c.x * c.x + c.y * c.y,
-				p.x, p.y, p.x * p.x + p.y * p.y)
+				a.x, c.x, p.x,
+				a.y, c.y, p.y,
+				a2, c2, p2)
 			- determinant(
-				a.x, a.y, a.x * a.x + a.y * a.y,
-				b.x, b.y, b.x * b.x + b.y * b.y,
-				p.x, p.y, p.x * p.x + p.y * p.y)
+				a.x, b.x, p.x,
+				a.y, b.y, p.y,
+				a2, b2, p2)
 			+ determinant(
-				a.x, a.y, a.x * a.x + a.y * a.y,
-				b.x, b.y, b.x * b.x + b.y * b.y,
-				c.x, c.y, c.x * c.x + c.y * c.y);
-		return d >= 0.0; // question: shold this be > or >= ?
+				a.x, b.x, c.x,
+				a.y, b.y, c.y,
+				a2, b2, c2);
+		/*double d =
+			- determinant(
+				b.x, b.y, b2,
+				c.x, c.y, c2,
+				p.x, p.y, p2)
+			+ determinant(
+				a.x, a.y, a2,
+				c.x, c.y, c2,
+				p.x, p.y, p2)
+			- determinant(
+				a.x, a.y, a2,
+				b.x, b.y, b2,
+				p.x, p.y, p2)
+			+ determinant(
+				a.x, a.y, a2,
+				b.x, b.y, b2,
+				c.x, c.y, c2);*/
+		return d > 0.0;
 	}
 
 	bool Edge::contains(const Vertex& p) const
@@ -175,12 +197,11 @@ namespace dt {
 		Vertex& a = *(this->inc->orig);
 		Vertex& b = *(this->inc->succ->orig);
 		Vertex& c = *(this->inc->pred->orig);
-		return !((a.h >= height && b.h >= height && c.h >= height) || (a.h <= height && b.h <= height && c.h <= height));
+		return !((a.h > height && b.h > height && c.h > height) || (a.h <= height && b.h <= height && c.h <= height));
 	}
 
-	Delaunay::Delaunay(const std::vector<Vertex>& vertices)
+	Delaunay::Delaunay(const std::vector<Vertex>& vertices, double deleteLongTriangleAtBoundary)
 	{
-		// TODO: write some routine to make sure there are no duplicate points?
 		if (vertices.size() < 3)
 		{
 			throw std::invalid_argument("vertex list is too small");
@@ -200,9 +221,13 @@ namespace dt {
 			if (v.h < minH) minH = v.h;
 		}
 
-		// Store the vertices locally
+		// normalize and store the vertices locally
 		_vertices = vertices;
-		triangulate();
+		for (Vertex& v : _vertices)
+		{
+			v = world2screen(v);
+		}
+		triangulate(deleteLongTriangleAtBoundary);
 	}
 
 	Delaunay::~Delaunay()
@@ -217,58 +242,79 @@ namespace dt {
 		}
 	}
 
-	void Delaunay::triangulate()
+	void Delaunay::triangulate(double deleteLongTriangleAtBoundary)
 	{
 		// initilization: add super triangle
-		// Determinate the super triangle
-		const double dx = maxX - minX;
-		const double dy = maxY - minY;
-		const double deltaMax = (dx > dy) ? dx : dy;
-		const double midx = (minX + maxX) / 2;
-		const double midy = (minY + maxY) / 2;
-
-		Vertex a(midx - 20 * deltaMax, midy - deltaMax);
-		Vertex b(midx + 20 * deltaMax, midy - deltaMax);
-		Vertex c(midx, midy + 20 * deltaMax);
+		double size = lerp(3.0, 1.1, deleteLongTriangleAtBoundary);
+		Vertex a(-size, -size);
+		Vertex b(size, -size);
+		Vertex c(size, size);
+		Vertex d(-size, size);
 
 		Edge* ab = new Edge;
 		Edge* bc = new Edge;
 		Edge* ca = new Edge;
-		Triangle* t = new Triangle;
+		Edge* ac = new Edge;
+		Edge* cd = new Edge;
+		Edge* da = new Edge;
+		Triangle* abc = new Triangle;
+		Triangle* acd = new Triangle;
 		
 		ab->orig = &a;
 		ab->pred = ca;
 		ab->succ = bc;
 		ab->twin = nullptr;
-		ab->inc = t;
+		ab->inc = abc;
 
 		bc->orig = &b;
 		bc->pred = ab;
 		bc->succ = ca;
 		bc->twin = nullptr;
-		bc->inc = t;
+		bc->inc = abc;
 
 		ca->orig = &c;
 		ca->pred = bc;
 		ca->succ = ab;
-		ca->twin = nullptr;
-		ca->inc = t;
+		ca->twin = ac;
+		ca->inc = abc;
 
-		//a.inc = ab;
-		//b.inc = bc;
-		//c.inc = ca;
+		ac->orig = &a;
+		ac->pred = da;
+		ac->succ = cd;
+		ac->twin = ca;
+		ac->inc = acd;
 
-		t->inc = ab;
+		cd->orig = &c;
+		cd->pred = ac;
+		cd->succ = da;
+		cd->twin = nullptr;
+		cd->inc = acd;
+
+		da->orig = &d;
+		da->pred = cd;
+		da->succ = ac;
+		da->twin = nullptr;
+		da->inc = acd;
+
+		abc->inc = ab;
+		acd->inc = ac;
 
 		_edges.push_back(ab);
 		_edges.push_back(bc);
 		_edges.push_back(ca);
-		_triangles.push_back(t);
+		_edges.push_back(ac);
+		_edges.push_back(cd);
+		_edges.push_back(da);
+		_triangles.push_back(abc);
+		_triangles.push_back(acd);
+
+		int index = 0;
 
 		// add new vertices in random order
 		for (auto& v : _vertices)
 		{
 			// point location: determine which triangle v is in
+			index++;
 			Triangle* t = nullptr;
 			for (const auto& triangle : _triangles)
 			{
@@ -515,7 +561,7 @@ namespace dt {
 		// delete all triangles connected to 3 points of the super triangle
 		for (auto& t : _triangles)
 		{
-			if (t->hasVertex(&a) || t->hasVertex(&b) || t->hasVertex(&c))
+			if (t->hasVertex(&a) || t->hasVertex(&b) || t->hasVertex(&c) || t->hasVertex(&d))
 			{
 				// also make 3 incident edges' incident triangle null
 				t->inc->inc = nullptr;
@@ -561,13 +607,14 @@ namespace dt {
 		return indices;
 	}
 
-	bool Delaunay::interpolate(Vertex& p) const
+	bool Delaunay::interpolate(Vertex& p_world) const
 	{
 		// point location: in which triangle is p located?
+		Vertex p_screen = world2screen(p_world);
 		Triangle* t = nullptr;
 		for (const auto& triangle : _triangles)
 		{
-			if (triangle->contains(p))
+			if (triangle->contains(p_screen))
 			{
 				t = triangle;
 				break;
@@ -578,18 +625,20 @@ namespace dt {
 			return false;
 		}
 		else {
-			t->interpolate(p);
+			t->interpolate(p_screen);
+			p_world.h = screen2world(p_screen).h;
 			return true;
 		}
 	}
 
-	std::vector<Contour> Delaunay::getContours(double height, double minRelativeLength)
+	std::vector<Contour> Delaunay::getContours(double height)
 	{
 		std::vector<Contour> contours;
-		if (height < getMinH() || height > getMaxH())
+		if (height < minH || height > maxH)
 		{
 			return contours;
 		}
+		height = (height - minH) / (maxH - minH) * 2 - 1; // world2screen
 
 		std::vector<Triangle*> unvisited = _triangles;
 		while (!unvisited.empty()) // end condition: all triangles are visited
@@ -616,7 +665,7 @@ namespace dt {
 				c.push_back(v);
 				// every interation process a triangle along the contour
 				// until it reaches the boundary or back to the start point (forming a closed loop)
-				// for h = some point exact height, this algorithm will create some duplate point in the contour, we can postprocess them to remove the duplcate points
+				// for h = some point exact height, this algorithm will create some duplicate points in the contour, postprocess them to remove the duplcate points
 				while (e != nullptr)
 				{
 					auto cur = std::find(unvisited.begin(), unvisited.end(), e->inc);
@@ -640,42 +689,47 @@ namespace dt {
 				{
 					auto cur = std::find(unvisited.begin(), unvisited.end(), e->inc);
 					if (cur == unvisited.end()) break;
-					if (e->pred->intersect(height, v))
+					if (e->succ->intersect(height, v))
 					{ 
 						c.push_front(v);
-						e = e->pred->twin;
+						e = e->succ->twin;
 					}
-					else if (e->succ->intersect(height, v))
+					else if (e->pred->intersect(height, v))
 					{
 						c.push_front(v);
-						e = e->succ->twin;
+						e = e->pred->twin;
 					}
 					unvisited.erase(cur);
 				}
 				c.unique(); // remove consecutive duplicate points
-				// remove end points based on distance
-				Contour new_contour(c.begin(), c.end());// move points to a vector
-				if (new_contour.size() > 2 && (new_contour[0] != new_contour.back()))
+
+				if (c.size() > 1)
 				{
-					std::vector<double> distances;
-					for (auto it = new_contour.begin() + 1; it != new_contour.end(); ++it)
+					for (auto& v : c)
 					{
-						distances.push_back(Distance(*it, *(it - 1)));
+						v = screen2world(v);
 					}
-					double max = *std::max_element(distances.begin(), distances.end());
-					if (distances.back() < max * minRelativeLength)
-					{
-						new_contour.pop_back();
-					}
-					if (distances[0] < max * minRelativeLength)
-					{
-						new_contour.erase(new_contour.begin());
-					}
+					contours.emplace_back(c.begin(), c.end());
 				}
-				contours.emplace_back(std::move(new_contour));
 			}
 		}
 		return contours;
+	}
+
+	Vertex Delaunay::world2screen(const Vertex& p) const
+	{
+		double x = (p.x - minX) / (maxX - minX) * 2 - 1;
+		double y = (p.y - minY) / (maxY - minY) * 2 - 1;
+		double h = (p.h - minH) / (maxH - minH) * 2 - 1;
+		return Vertex(x, y, h);
+	}
+
+	Vertex Delaunay::screen2world(const Vertex& p) const
+	{
+		double x = (p.x + 1) / 2 * (maxX - minX) + minX;
+		double y = (p.y + 1) / 2 * (maxY - minY) + minY;
+		double h = (p.h + 1) / 2 * (maxH - minH) + minH;
+		return Vertex(x, y, h);
 	}
 
 	void Delaunay::legalizeEdge(Vertex* p, Edge* e)
@@ -739,12 +793,6 @@ namespace dt {
 			// update triangles
 			t1->inc = pq;
 			t2->inc = qp;
-
-			// update vertices
-			//p->inc = pa;
-			//q->inc = qb;
-			//b->inc = bp;
-			//a->inc = aq;
 
 			// recursive call
 			legalizeEdge(p, qb);

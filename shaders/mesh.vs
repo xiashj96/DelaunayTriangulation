@@ -1,7 +1,7 @@
 #version 330 core
 layout (location = 0) in vec3 pos;
 
-uniform mat4 world2screen;
+//uniform mat4 world2screen;
 
 // after transformation
 // x: [-0.9, 0.9]
@@ -10,5 +10,5 @@ uniform mat4 world2screen;
 
 void main()
 {
-    gl_Position = world2screen*vec4(pos, 1.0);
+    gl_Position = vec4(pos, 1.0);
 }
